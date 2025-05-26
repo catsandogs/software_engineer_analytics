@@ -1,0 +1,173 @@
+{% extends "analytics/base.html" %}
+
+{% block title %}{{ page_content.title }} - {{ config.site_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-4 fw-bold text-primary">
+                <i class="fas fa-microchip me-3"></i>
+                {% if page_content %}{{ page_content.title }}{% else %}Инженер-программист{% endif %}
+            </h1>
+            <p class="lead text-muted">
+                {% if page_content %}{{ page_content.description }}{% else %}Комплексная аналитика и статистика по профессии инженер-программист{% endif %}
+            </p>
+        </div>
+    </div>
+
+    <!-- Hero Image -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card bg-gradient">
+                <div class="card-body text-center py-5">
+                    <svg width="200" height="120" viewBox="0 0 200 120" class="mb-3">
+                        <!-- Software Engineer inspired SVG -->
+                        <defs>
+                            <linearGradient id="engineerGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0d6efd"/>
+                                <stop offset="100%" style="stop-color:#6610f2"/>
+                            </linearGradient>
+                        </defs>
+                        <rect x="50" y="30" width="100" height="60" rx="5" fill="url(#engineerGradient1)" opacity="0.8"/>
+                        <circle cx="75" cy="45" r="8" fill="white" opacity="0.9"/>
+                        <circle cx="125" cy="45" r="8" fill="white" opacity="0.9"/>
+                        <rect x="60" y="65" width="80" height="3" fill="white" opacity="0.7"/>
+                        <rect x="70" y="75" width="60" height="3" fill="white" opacity="0.7"/>
+                        <text x="100" y="110" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Software Engineer</text>
+                    </svg>
+                    <h3 class="text-light">Лидер технологического прогресса</h3>
+                    <p class="text-light opacity-75">Создание будущего через инновационные программные решения</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profession Description -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title h3 mb-4">
+                        <i class="fas fa-info-circle text-info me-2"></i>
+                        О профессии Инженер-программист
+                    </h2>
+                    
+                    {% if page_content and page_content.content_html %}
+                        {{ page_content.content_html|safe }}
+                    {% else %}
+                        <div class="profession-description">
+                            <p class="fs-5 mb-4">
+                                Инженер-программист — это высококвалифицированный специалист, который занимается разработкой, проектированием и сопровождением программного обеспечения. Эта профессия находится на пересечении инженерных наук и информационных технологий, требуя глубоких знаний как в области программирования, так и в системном анализе и архитектуре программных систем.
+                            </p>
+
+                            <h4>Основные обязанности и навыки</h4>
+                            <p>
+                                Инженеры-программисты отвечают за весь жизненный цикл программного продукта: от анализа требований и проектирования архитектуры до разработки, тестирования и внедрения. Они должны владеть множественными языками программирования, понимать принципы объектно-ориентированного программирования, работать с базами данных, системами контроля версий и современными методологиями разработки.
+                            </p>
+
+                            <p>
+                                Современный инженер-программист должен обладать навыками работы с облачными технологиями, контейнеризацией, микросервисной архитектурой и DevOps-практиками. Важными качествами являются аналитическое мышление, способность к решению сложных технических задач и умение работать в команде.
+                            </p>
+
+                            <h4>Области применения и специализации</h4>
+                            <p>
+                                Профессия инженера-программиста востребована в различных отраслях: от разработки веб-приложений и мобильных приложений до создания систем управления предприятием, игр, систем искусственного интеллекта и программного обеспечения для научных исследований. Специалисты работают в IT-компаниях, банках, телекоммуникационных компаниях, государственных учреждениях и стартапах.
+                            </p>
+
+                            <p>
+                                Основные направления специализации включают: frontend и backend разработку, мобильную разработку, DevOps инженерию, архитектуру программных систем, тестирование и обеспечение качества, разработку игр, машинное обучение и анализ данных, кибербезопасность и системное программирование.
+                            </p>
+
+                            <h4>Карьерные перспективы и развитие</h4>
+                            <p>
+                                Карьерный рост инженера-программиста может идти по нескольким путям: техническому (от junior до senior разработчика, lead developer, software architect, principal engineer), управленческому (team lead, engineering manager, CTO) или экспертному (tech lead, principal engineer, distinguished engineer). Профессия предоставляет отличные возможности для удаленной работы и участия в международных проектах.
+                            </p>
+
+                            <p>
+                                Современный рынок предлагает множество возможностей для профессионального развития: участие в open source проектах, получение сертификаций от ведущих технологических компаний, участие в конференциях и митапах, онлайн-обучение и менторство.
+                            </p>
+
+                            <h4>Компенсация и условия работы</h4>
+                            <p>
+                                Инженеры-программисты получают конкурентоспособную заработную плату, которая значительно зависит от уровня навыков, опыта работы, специализации и региона. Старшие инженеры-программисты с экспертизой в востребованных областях часто получают премиальные пакеты компенсации, включающие акционные опционы и бонусы.
+                            </p>
+
+                            <p>
+                                Многие компании предоставляют дополнительные льготы: комплексное медицинское страхование, образовательные бюджеты для профессионального развития, гибкий график работы, возможность удаленной работы, корпоративные мероприятия и современное техническое оборудование. Культура многих IT-компаний способствует инновациям и личностному росту сотрудников.
+                            </p>
+
+                            <h4>Будущее профессии и тенденции</h4>
+                            <p>
+                                Будущее профессии инженера-программиста выглядит исключительно перспективным с учетом цифровой трансформации всех отраслей экономики. Развитие искусственного интеллекта, интернета вещей, блокчейн технологий, квантовых вычислений и дополненной реальности создает новые возможности для специализации и карьерного роста.
+                            </p>
+
+                            <p>
+                                Растущий спрос на кибербезопасность, экологически устойчивые технологические решения и этичное программирование создает новые направления для развития профессии. Инженеры-программисты будут играть ключевую роль в создании более безопасного, эффективного и справедливого цифрового мира.
+                            </p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Statistics -->
+    <div class="row mt-5">
+        <div class="col-md-6">
+            <div class="card bg-light text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-chart-line text-success me-2"></i>
+                        Ключевые показатели
+                    </h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <i class="fas fa-star text-warning me-2"></i>
+                            <strong>Популярность:</strong> Одна из самых востребованных профессий в IT
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-trending-up text-success me-2"></i>
+                            <strong>Рост:</strong> Устойчивый рост спроса на рынке труда
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-briefcase text-info me-2"></i>
+                            <strong>Рынок труда:</strong> Высокий спрос во всех отраслях
+                        </li>
+                        <li class="mb-2">
+                            <i class="fas fa-graduation-cap text-primary me-2"></i>
+                            <strong>Обучение:</strong> Множество путей профессионального развития
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-tools text-primary me-2"></i>
+                        Популярные технологии
+                    </h5>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-primary">Python</span>
+                        <span class="badge bg-success">Java</span>
+                        <span class="badge bg-info">JavaScript</span>
+                        <span class="badge bg-warning text-dark">C#</span>
+                        <span class="badge bg-danger">C++</span>
+                        <span class="badge bg-secondary">Go</span>
+                        <span class="badge bg-dark">Rust</span>
+                        <span class="badge bg-primary">React</span>
+                        <span class="badge bg-success">Node.js</span>
+                        <span class="badge bg-info">Docker</span>
+                        <span class="badge bg-warning text-dark">Kubernetes</span>
+                        <span class="badge bg-danger">AWS</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

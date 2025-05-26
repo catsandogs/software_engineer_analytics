@@ -1,0 +1,42 @@
+The template for all pages on the site must include:  
+- A **header** containing a logo—the project name, which you will come up with.  
+- A **footer** containing the full name and academic group of the student.  
+- A **left-side menu** with links to all pages on the site, along with their corresponding names.  
+
+### **Main Page**  
+Should contain:  
+- A title.  
+- A description of the profession (text of at least 2000 characters).  
+- Thematically relevant images for the profession (minimum of 1 image).  
+
+### **"General Statistics" Page**  
+Should contain the following tabular data and graphs (all information must be presented simultaneously in tables and graphs). All tables and graphs must have appropriate titles.  
+1. **Salary Level Dynamics by Year** (must consider all vacancies, even those with salaries in other currencies. The average salary range must be converted to rubles using the Central Bank exchange rate on the first day of the month the vacancy was published. Exclude vacancies with salaries exceeding 10 million rubles, as they are considered incorrectly filled.)  
+2. **Vacancy Count Dynamics by Year** (must consider all vacancies, even those with empty fields).  
+3. **Salary Levels by City** (in descending order; if a vacancy specifies a foreign currency, apply the same conversion as for salary dynamics by year).  
+4. **Vacancy Distribution by City** (in descending order; must consider all vacancies, even those with empty fields).  
+5. **TOP 20 Skills by Year** (most frequently mentioned skills, based on the `key_skills` field analysis).  
+
+### **"Demand" Page**  
+Should contain the following tabular data and graphs (all information must be presented simultaneously in tables and graphs). All tables and graphs must have appropriate titles.  
+1. **Salary Level Dynamics by Year for the Selected Profession** (requirements are the same as for general salary dynamics by year).  
+2. **Vacancy Count Dynamics by Year for the Selected Profession** (requirements are the same as for general vacancy count dynamics by year).  
+
+### **"Geography" Page**  
+Should contain the following tabular data and graphs (all information must be presented simultaneously in tables and graphs). All tables and graphs must have appropriate titles.  
+1. **Salary Levels by City for the Selected Profession** (in descending order; requirements are the same as for salary dynamics by year).  
+2. **Vacancy Distribution by City for the Selected Profession** (in descending order; requirements are the same as for vacancy count dynamics by year).  
+
+### **"Skills" Page**  
+Should contain the following tabular data and graphs. All tables and graphs must have appropriate titles.  
+- **TOP 20 Skills by Year for the Selected Profession** (most frequently mentioned skills, based on the `key_skills` field analysis).  
+
+### **"Latest Vacancies" Page**  
+When visiting the page, the system must fetch IT vacancies matching the selected profession from the **HH API in real-time** (from the last 24 hours, maximum of 10 vacancies, sorted by publication date). Each list item must contain the following fields:  
+- Vacancy name.  
+- Vacancy description (*advanced task, requires an additional GET request*).  
+- Skills (listed in a single line, separated by commas) (*advanced task, requires an additional GET request*).  
+- Company name.  
+- Salary.  
+- Region name.  
+- Vacancy publication date.
