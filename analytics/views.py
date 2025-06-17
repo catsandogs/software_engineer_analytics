@@ -1,3 +1,4 @@
+import plotly
 from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.cache import cache_page
@@ -10,6 +11,13 @@ import json
 from django.core.serializers.json import DjangoJSONEncoder
 
 from datetime import datetime, timedelta
+import plotly.graph_objs as go
+import json
+from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe
+import json
+import plotly.graph_objects as go
+from plotly.offline import plot
 
 logger = logging.getLogger(__name__)
 
@@ -70,20 +78,46 @@ def index(request):
     return render(request, 'analytics/index.html', context)
 
 
+from django.http import HttpRequest
+from unittest.mock import Mock
+
+
 def general_stats(request):
     """General statistics page"""
     config = get_site_config()
     page_content = get_page_content('general_stats')
 
-    # Get statistical data
-    stats_data = {
-        'salary_dynamics': StatisticalData.objects.filter(data_type='demand_salary', is_active=True).first(),
-        'vacancy_count': StatisticalData.objects.filter(data_type='demand_vacancy', is_active=True).first(),
-        'salary_by_city': StatisticalData.objects.filter(data_type='geo_salary', is_active=True).first(),
-        'vacancy_by_city': StatisticalData.objects.filter(data_type='geo_vacancy', is_active=True).first(),
-        'top_skills': StatisticalData.objects.filter(data_type='skills_by_year', is_active=True).first(),
+    # Получаем объекты StatisticalData
+    salary_dynamics = StatisticalData.objects.filter(data_type='demand_salary', is_active=True).first()
+    vacancy_count = StatisticalData.objects.filter(data_type='demand_vacancy', is_active=True).first()
+    salary_by_city = StatisticalData.objects.filter(data_type='geo_salary', is_active=True).first()
+    vacancy_by_city = StatisticalData.objects.filter(data_type='geo_vacancy', is_active=True).first()
+    top_skills = StatisticalData.objects.filter(data_type='skills_by_year', is_active=True).first()
 
+    # Создаем структуру данных, соответствующую ожиданиям шаблона
+    stats_data = {
+        'salary_dynamics': {
+            'chart_image': salary_dynamics.chart_image if salary_dynamics else None,
+            'table_html': salary_dynamics.raw_data if salary_dynamics else None,
+        },
+        'vacancy_count': {
+            'chart_image': vacancy_count.chart_image if vacancy_count else None,
+            'table_html': vacancy_count.raw_data if vacancy_count else None,
+        },
+        'salary_by_city': {
+            'chart_image': salary_by_city.chart_image if salary_by_city else None,
+            'table_html': salary_by_city.raw_data if salary_by_city else None,
+        },
+        'vacancy_by_city': {
+            'chart_image': vacancy_by_city.chart_image if vacancy_by_city else None,
+            'table_html': vacancy_by_city.raw_data if vacancy_by_city else None,
+        },
+        'top_skills': {
+            'chart_image': top_skills.chart_image if top_skills else None,
+            'table_html': top_skills.raw_data if top_skills else None,
+        },
     }
+
 
     context = {
         'config': config,
@@ -91,7 +125,6 @@ def general_stats(request):
         'stats_data': stats_data,
     }
     return render(request, 'analytics/general_stats.html', context)
-
 # analytics/views.py
 
 def demand(request):
@@ -121,50 +154,32 @@ def demand(request):
 
 
 
-def geography(request):
-    config = get_site_config()
-    page_content = get_page_content('geography')
 
-    salary_data = StatisticalData.objects.filter(data_type='geo_salary', is_active=True).first()
-    vacancy_data = StatisticalData.objects.filter(data_type='geo_vacancy', is_active=True).first()
-
-    # Сериализуем raw_data в JSON-строку
-    salary_chart_json = json.dumps(salary_data.raw_data, cls=DjangoJSONEncoder) if salary_data and salary_data.raw_data else None
-    vacancy_chart_json = json.dumps(vacancy_data.raw_data, cls=DjangoJSONEncoder) if vacancy_data and vacancy_data.raw_data else None
-
-    context = {
-        'config': config,
-        'page_content': page_content,
-        'stats_data': {
-            'salary_by_city': {
-                'chart_data': salary_chart_json,
-                'table_data': salary_data.table_data if salary_data and hasattr(salary_data, 'table_data') else None
-            },
-            'vacancy_by_city': {
-                'chart_data': vacancy_chart_json,
-                'table_data': vacancy_data.table_data if vacancy_data and hasattr(vacancy_data, 'table_data') else None
-            }
-        }
-    }
-    print("Salary data:", salary_data.raw_data)
-    print("Vacancy data:", vacancy_data.raw_data)
-    return render(request, 'analytics/geography.html', context)
 
 def geography(request):
     print("✅ geography view вызван")
+
+    salary_data = StatisticalData.objects.filter(data_type='geo_salary', is_active=True).first()
+    vacancy_data = StatisticalData.objects.filter(data_type='geo_vacancy', is_active=True).first()
     config = get_site_config()
     page_content = get_page_content('geography')
-
-    # Жёстко закодированные тестовые данные (для проверки)
+    print("Salary data:", salary_data.raw_data['labels'])
+    print("Salary data:", (salary_data.raw_data['datasets'])[0]['data'])
+    print("Vacancy data:", vacancy_data.raw_data['labels'])
+    print("Vacancy data:", vacancy_data.raw_data['datasets'][0]['data'])
+    data_table_city = salary_data.raw_data['labels']
+    data_table_val =(salary_data.raw_data['datasets'])[0]['data']
+    table_vac = vacancy_data.raw_data['labels']
+    table_vac1 =vacancy_data.raw_data['datasets'][0]['data']
     TEST_SALARY_DATA = {
-        'cities': ['Москва', 'Санкт-Петербург', 'Новосибирск'],
-        'salaries': [120000, 95000, 80000],
+        'cities': data_table_city,
+        'salaries': data_table_val,
         'chart_type': 'bar'
     }
 
     TEST_VACANCY_DATA = {
-        'cities': ['Москва', 'Санкт-Петербург', 'Екатеринбург'],
-        'vacancies': [45, 30, 25],
+        'cities': vacancy_data.raw_data['labels'],
+        'vacancies': vacancy_data.raw_data['datasets'][0]['data'],
         'chart_type': 'pie'
     }
 
@@ -175,15 +190,14 @@ def geography(request):
             'salary_by_city': {
                 'chart_data': TEST_SALARY_DATA,  # Замените на None для проверки реальных данных
                 'table_data': [
-                    {'city': 'Москва', 'value': '120,000.00'},
-                    {'city': 'СПб', 'value': '95,000.00'}
+
+                    {'city': data_table_city[i], 'value': data_table_val[i]} for i in range(len(data_table_city))
                 ]
             },
             'vacancy_by_city': {
                 'chart_data': TEST_VACANCY_DATA,  # Замените на None для проверки реальных данных
                 'table_data': [
-                    {'city': 'Москва', 'value': '45'},
-                    {'city': 'СПб', 'value': '30'}
+                    {'city': table_vac[i], 'value': table_vac1[i]} for i in range(len(table_vac))
                 ]
             }
         }

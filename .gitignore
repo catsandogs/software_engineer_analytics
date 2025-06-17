@@ -29,3 +29,10 @@ Desktop.ini
 .env
 *.env
 secrets.json
+
+# OS
+.DS_Store
+
+# Virtual environment
+venv/
+env/

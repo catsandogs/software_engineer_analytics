@@ -50,6 +50,7 @@ class StatisticalData(models.Model):
     data_type = models.CharField(max_length=50, choices=DATA_TYPES, unique=True)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
+
     
     # Chart as image file
     chart_image = models.ImageField(
