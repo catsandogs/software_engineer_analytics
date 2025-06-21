@@ -126,7 +126,7 @@ class SiteConfiguration(models.Model):
     site_title = models.CharField(max_length=200, default="Software Engineer Analytics Hub")
     site_description = models.TextField(default="Comprehensive analytics for Software Engineer profession")
     footer_text = models.TextField(
-        default="Студент: Иванов Иван Иванович | Группа: ИВТ-21-1 | Курс: Анализ данных и визуализация"
+        default='Студент: Тренихин М | Группа:231003 | Курс:питон'
     )
     profession_keywords = models.TextField(
         default="инженер, инженер-программист, инженер, ИТ-инженер, инженер-разработчик",
