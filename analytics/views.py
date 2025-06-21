@@ -28,7 +28,7 @@ def get_site_config():
         defaults={
             'site_title': 'Software Engineer Analytics Hub',
             'site_description': 'Comprehensive analytics for Software Engineer profession',
-            'footer_text': 'Студент: Иванов Иван Иванович | Группа: ИВТ-21-1 | Курс: Анализ данных и визуализация'
+            'footer_text': 'Студент: Тренихин М | Группа:231003 | Курс:питон'
         }
     )
     return config
