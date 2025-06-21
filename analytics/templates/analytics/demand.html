@@ -1,0 +1,126 @@
+{% extends "analytics/base.html" %}
+
+{% block title %}Востребованность - {{ config.site_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-trending-up text-primary me-3"></i>
+                Востребованность инженер-программист
+            </h1>
+            <p class="lead text-muted">
+                Специализированная аналитика спроса и зарплат для позиций инженер-программист
+            </p>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-ruble-sign text-success me-2"></i>
+                        Динамика зарплат инженер-программист по годам
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if stats_data.salary_dynamics %}
+                        <div class="chart-container">
+                            <canvas id="salaryChart"></canvas>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const ctx = document.getElementById('salaryChart').getContext('2d');
+                                new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: {{ stats_data.salary_dynamics.raw_data.labels|safe }},
+                                        datasets: [{
+                                            label: '{{ stats_data.salary_dynamics.raw_data.datasets.0.label }}',
+                                            data: {{ stats_data.salary_dynamics.raw_data.datasets.0.data|safe }},
+                                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                            borderWidth: 2
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: '{{ stats_data.salary_dynamics.title }}'
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Данные по зарплатам инженер-программист будут загружены через админ-панель.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-chart-line text-info me-2"></i>
+                        Количество вакансий инженер-программист по годам
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if stats_data.vacancy_count %}
+                        <div class="chart-container">
+                            <canvas id="vacancyChart"></canvas>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                const ctx = document.getElementById('vacancyChart').getContext('2d');
+                                new Chart(ctx, {
+                                    type: 'bar',
+                                    data: {
+                                        labels: {{ stats_data.vacancy_count.raw_data.labels|safe }},
+                                        datasets: [{
+                                            label: '{{ stats_data.vacancy_count.raw_data.datasets.0.label }}',
+                                            data: {{ stats_data.vacancy_count.raw_data.datasets.0.data|safe }},
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 2
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        plugins: {
+                                            title: {
+                                                display: true,
+                                                text: '{{ stats_data.vacancy_count.title }}'
+                                            }
+                                        }
+                                    }
+                                });
+                            });
+                        </script>
+                    {% else %}
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle me-2"></i>
+                            Данные по количеству вакансий будут загружены через админ-панель.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключаем Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

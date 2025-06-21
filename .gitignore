@@ -1,0 +1,34 @@
+# 1. Файлы IDE и ОС
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
+
+# 2. Виртуальное окружение
+venv/
+.env/
+*.env
+
+# 3. Python-специфичное
+__pycache__/
+*.py[cod]
+*.so
+.Python
+pip-selfcheck.json
+
+# 4. Django
+db.sqlite3          # Локальная SQLite-база
+*.log               # Логи сервера
+/media/             # Загруженные пользователями файлы
+/static/            # Собранная статика (если используете collectstatic)
+local_settings.py   # Локальные настройки (с секретными данными)
+
+# 5. Миграции (спорно!)
+/migrations/*       # Исключаем миграции, кроме __init__.py
+!/migrations/__init__.py
+
+# 6. Установленные зависимости
+*.egg-info/
+dist/
+build/
