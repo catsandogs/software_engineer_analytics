@@ -1,0 +1,9 @@
+django
+psycopg2-binary
+requests
+matplotlib
+pandas
+pillow
+seaborn
+gunicorn
+plotly
