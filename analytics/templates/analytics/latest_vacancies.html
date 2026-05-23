@@ -1,0 +1,299 @@
+{% extends "analytics/base.html" %}
+
+{% block title %}Последние вакансии - {{ config.site_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-briefcase text-primary me-3"></i>
+                Последние вакансии инженер-программист
+            </h1>
+            <p class="lead text-muted">
+                Актуальные вакансии из базы данных и HeadHunter API
+            </p>
+        </div>
+    </div>
+
+    <!-- Data Sources Info -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="alert alert-info" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-info-circle fa-2x me-3"></i>
+                    <div>
+                        <h6 class="alert-heading mb-1">Источники данных</h6>
+                        <p class="mb-0">
+                            Данные загружаются из обработанного CSV файла и, при включении, из HeadHunter API в реальном времени.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if api_enabled and api_vacancies %}
+    <!-- API Vacancies Section -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <h3>
+                <i class="fas fa-cloud text-info me-2"></i>
+                Вакансии из HeadHunter API (последние 24 часа)
+            </h3>
+            <p class="text-muted mb-3">Найдено {{ api_vacancies|length }} свежих вакансий</p>
+            
+            {% for vacancy in api_vacancies %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h5 class="card-title">
+                                <a href="{{ vacancy.url }}" target="_blank" class="text-decoration-none">
+                                    {{ vacancy.name }}
+                                    <i class="fas fa-external-link-alt fa-sm ms-1"></i>
+                                </a>
+                            </h5>
+                            
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <p class="mb-1">
+                                        <i class="fas fa-building text-primary me-2"></i>
+                                        <strong>Компания:</strong> {{ vacancy.employer }}
+                                    </p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p class="mb-1">
+                                        <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                        <strong>Местоположение:</strong> {{ vacancy.area }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-sm-6">
+                                    <p class="mb-1">
+                                        <i class="fas fa-ruble-sign text-success me-2"></i>
+                                        <strong>Зарплата:</strong> {{ vacancy.salary }}
+                                    </p>
+                                </div>
+                                <div class="col-sm-6">
+                                    <p class="mb-1">
+                                        <i class="fas fa-calendar text-info me-2"></i>
+                                        <strong>Опубликовано:</strong> {{ vacancy.published_at }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="mb-0">
+                                <p class="mb-1">
+                                    <i class="fas fa-cogs text-warning me-2"></i>
+                                    <strong>Навыки:</strong>
+                                </p>
+                                <p class="text-muted">{{ vacancy.skills }}</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="border-start ps-3 h-100 d-flex flex-column">
+                                <div class="text-center mb-3">
+                                    <i class="fas fa-cloud fa-3x text-info mb-2"></i>
+                                    <h6 class="text-muted">API #{{ forloop.counter }}</h6>
+                                </div>
+
+                                <div class="mt-auto">
+                                    <a href="{{ vacancy.url }}" target="_blank" class="btn btn-primary w-100">
+                                        <i class="fas fa-eye me-2"></i>
+                                        Подробнее на HH.ru
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Database Vacancies Section -->
+    <div class="row">
+        <div class="col-12">
+            <h3>
+                <i class="fas fa-database text-success me-2"></i>
+                Вакансии из базы данных
+            </h3>
+            
+            {% if db_vacancies %}
+                <p class="text-muted mb-3">Последние {{ db_vacancies|length }} вакансий инженер-программист</p>
+                
+                {% for vacancy in db_vacancies %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">{{ vacancy.name }}</h5>
+                                
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <p class="mb-1">
+                                            <i class="fas fa-building text-primary me-2"></i>
+                                            <strong>Компания:</strong> {{ vacancy.employer_name }}
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1">
+                                            <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                            <strong>Город:</strong> {{ vacancy.area_name }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-sm-6">
+                                        <p class="mb-1">
+                                            <i class="fas fa-ruble-sign text-success me-2"></i>
+                                            <strong>Зарплата:</strong> 
+                                            {% if vacancy.salary_from or vacancy.salary_to %}
+                                                {% if vacancy.salary_from %}от {{ vacancy.salary_from|floatformat:0 }}{% endif %}
+                                                {% if vacancy.salary_to %}до {{ vacancy.salary_to|floatformat:0 }}{% endif %}
+                                                {{ vacancy.salary_currency }}
+                                            {% else %}
+                                                Не указана
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p class="mb-1">
+                                            <i class="fas fa-calendar text-info me-2"></i>
+                                            <strong>Опубликовано:</strong> 
+                                            {% if vacancy.published_at %}
+                                                {{ vacancy.published_at|date:"d.m.Y H:i" }}
+                                            {% else %}
+                                                Дата не указана
+                                            {% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {% if vacancy.key_skills %}
+                                <div class="mb-3">
+                                    <p class="mb-1">
+                                        <i class="fas fa-cogs text-warning me-2"></i>
+                                        <strong>Ключевые навыки:</strong>
+                                    </p>
+                                    <p class="text-muted">{{ vacancy.key_skills|truncatechars:200 }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if vacancy.description %}
+                                <div class="mb-0">
+                                    <p class="mb-1">
+                                        <i class="fas fa-file-alt text-secondary me-2"></i>
+                                        <strong>Описание:</strong>
+                                    </p>
+                                    <div class="description-content">
+                                        <p class="text-muted">{{ vacancy.description|truncatechars:300 }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="border-start ps-3 h-100 d-flex flex-column">
+                                    <div class="text-center mb-3">
+                                        <i class="fas fa-database fa-3x text-success mb-2"></i>
+                                        <h6 class="text-muted">ID: {{ vacancy.vacancy_id }}</h6>
+                                        {% if vacancy.experience %}
+                                            <small class="badge bg-info">{{ vacancy.experience }}</small>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mt-auto">
+                                        {% if vacancy.salary_in_rub %}
+                                            <div class="alert alert-success text-center py-2 mb-2">
+                                                <small>
+                                                    <strong>{{ vacancy.salary_in_rub|floatformat:0 }} ₽</strong><br>
+                                                    (конвертировано)
+                                                </small>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-database fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">Нет данных в базе</h4>
+                    <p class="text-muted">Загрузите CSV файл через админ-панель для отображения вакансий.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Data Management Info -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card bg-light border-0">
+                <div class="card-body">
+                    <h5 class="card-title text-dark">
+                        <i class="fas fa-info-circle text-primary me-2"></i>
+                        Управление данными о вакансиях
+                    </h5>
+                    <div class="row text-dark">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-upload text-success me-2"></i>
+                                    CSV файл обрабатывается через админ-панель
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-filter text-warning me-2"></i>
+                                    Автоматическая фильтрация по ключевым словам
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-exchange-alt text-info me-2"></i>
+                                    Конвертация валют в рубли
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="fas fa-cloud text-primary me-2"></i>
+                                    HeadHunter API для актуальных данных
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-clock text-secondary me-2"></i>
+                                    Последние 24 часа для API запросов
+                                </li>
+                                <li class="mb-2">
+                                    <i class="fas fa-tags text-danger me-2"></i>
+                                    Поиск по ключевым словам: {{ config.profession_keywords }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.description-content {
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+}
+</style>
+{% endblock %}

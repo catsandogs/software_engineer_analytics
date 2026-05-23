@@ -1,0 +1,177 @@
+{% extends "analytics/base.html" %}
+
+{% block title %}География - {{ config.site_title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-map-marked-alt text-primary me-3"></i>
+                Географическое распределение
+            </h1>
+            <p class="lead text-muted">
+                Региональный анализ возможностей и зарплат для инженер-программистов
+            </p>
+        </div>
+    </div>
+
+    <!-- Зарплаты по городам -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-ruble-sign text-success me-2"></i>
+                        Уровень зарплат по городам
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if stats_data.salary_by_city.chart_data %}
+                        <div class="chart-container mb-4" style="height: 400px;">
+                            <canvas id="salaryByCityChart"></canvas>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            Данные по зарплатам по городам временно недоступны
+                        </div>
+                    {% endif %}
+
+                    {% if stats_data.salary_by_city.table_data %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Город</th>
+                                    <th>Средняя зарплата (руб)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in stats_data.salary_by_city.table_data %}
+                                <tr>
+                                    <td>{{ item.city }}</td>
+                                    <td>{{ item.value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Вакансии по городам -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-building text-info me-2"></i>
+                        Распределение вакансий по городам
+                    </h3>
+                </div>
+                <div class="card-body">
+                    {% if stats_data.vacancy_by_city.chart_data %}
+                        <div class="chart-container mb-4" style="height: 400px;">
+                            <canvas id="vacancyByCityChart"></canvas>
+                        </div>
+                    {% else %}
+                        <div class="alert alert-info">
+                            Данные по распределению вакансий временно недоступны
+                        </div>
+                    {% endif %}
+
+                    {% if stats_data.vacancy_by_city.table_data %}
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Город</th>
+                                    <th>Доля вакансий (%)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in stats_data.vacancy_by_city.table_data %}
+                                <tr>
+                                    <td>{{ item.city }}</td>
+                                    <td>{{ item.value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    {% if stats_data.salary_by_city.chart_data %}
+    // График зарплат по городам
+    const salaryCtx = document.getElementById('salaryByCityChart').getContext('2d');
+    new Chart(salaryCtx, {
+        type: 'bar',
+        data: {
+            labels: {{ stats_data.salary_by_city.chart_data.cities|safe }},
+            datasets: [{
+                label: 'Средняя зарплата (руб)',
+                data: {{ stats_data.salary_by_city.chart_data.salaries|safe }},
+                backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: false
+                }
+            }
+        }
+    });
+    {% endif %}
+
+    {% if stats_data.vacancy_by_city.chart_data %}
+    // График вакансий по городам
+    const vacancyCtx = document.getElementById('vacancyByCityChart').getContext('2d');
+    new Chart(vacancyCtx, {
+        type: 'pie',
+        data: {
+            labels: {{ stats_data.vacancy_by_city.chart_data.cities|safe }},
+            datasets: [{
+                data: {{ stats_data.vacancy_by_city.chart_data.vacancies|safe }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right'
+                }
+            }
+        }
+    });
+    {% endif %}
+});
+</script>
+{% endblock %}
